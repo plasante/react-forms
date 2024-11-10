@@ -1,4 +1,5 @@
 import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 const FormOne = () => {
 
@@ -12,25 +13,22 @@ const FormOne = () => {
             state: '',
             zip: ''
           }}
-          validate={(values) => {
-            const errors = {};
-
-            if (!values.firstname) {
-              errors.firstname = 'First name is required';
-            }
-            if (!values.lastname) {
-              errors.lastname = 'Last name is required';
-            }
-            if (!values.email) {
-              errors.email = 'Email is required';
-            } else if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(values.email))
-            {
-              errors.email = 'Invalid email address';
-            }
-
-
-            return errors;
-          }}
+          validationSchema={Yup.object({
+            firstname: Yup
+                .string()
+                .required('First name is required')
+                .max(50, 'First name is too long')
+                .min(3, 'First name is too short'),
+            lastname: Yup
+                .string()
+                .required("Last name is required")
+                .max(50, 'Last name is too long')
+                .min(3, 'Last name is too short'),
+            email: Yup
+                .string()
+                .required('Email is required')
+                .email('Valid email is required')
+          })}
           onSubmit={(values) => {
             console.log(values);
           }}
