@@ -6,11 +6,30 @@ const FormThree = () => {
 
   const validationSchema = Yup.object({
     firstname: Yup.string().required("Please enter firstname"),
+    color: Yup.string()
   });
 
   const onSubmit = (values) => {
     console.log(values);
   };
+
+  const lastnameComponent = ({
+                               field,// {name, value, onchange, onblur}
+                               form:{ touched, errors },
+                               ...props
+                             }) => (
+      <>
+        <label htmlFor={field.name}>{props.labelname}</label>
+        <input
+            type='text'
+            className='form-control'
+            {...field}
+        />
+        { errors[field.name] && touched[field.name]?
+            <span>{errors[field.name]}</span>
+            :null}
+      </>
+  )
 
   return (
       <div className="container">
@@ -25,12 +44,19 @@ const FormThree = () => {
                   <label htmlFor="firstname">First name</label>
                   <Field name={'firstname'} type={'text'} className="form-control"/>
                   {/*<ErrorMessage name={'firstname'}/>*/}
-                  { formik.errors.firstname && formik.touched.firstname ?
+                  {formik.errors.firstname && formik.touched.firstname ?
                       <span>{formik.errors.firstname}</span>
                       : null
                   }
                   <hr className="mb-4"/>
 
+                  <Field
+                    name={'lastname'}
+                    placeholder={'Last name'}
+                    component={lastnameComponent}
+                  />
+
+                  <hr className="mb-4"/>
                   <Field
                       as={'select'}
                       name={'color'}
